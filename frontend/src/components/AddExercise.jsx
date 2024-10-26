@@ -1,28 +1,42 @@
 import React, { useState } from "react";
+import { useAddExerciseMutation } from "../apis/exerciseApi";
 
 export default function AddExercise() {
+  // Form state
   const [exerciseType, setExerciseType] = useState("");
   const [exerciseName, setExerciseName] = useState("");
   const [sets, setSets] = useState("");
   const [repsOrTime, setRepsOrTime] = useState("");
   const [weight, setWeight] = useState("");
 
-  const handleFormSubmit = (e) => {
+  // RTK Query Mutation Hook
+  const [addExercise] = useAddExerciseMutation();
+
+  // Form submission handler
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // Call your RTK Query mutation here to create an exercise
-    console.log({
-      exerciseType,
-      exerciseName,
-      sets,
-      repsOrTime,
-      weight,
-    });
-    // Reset form fields
-    setExerciseType("");
-    setExerciseName("");
-    setSets("");
-    setRepsOrTime("");
-    setWeight("");
+
+    try {
+      // Call the mutation function to create a new exercise
+      await addExercise({
+        type: exerciseType,
+        name: exerciseName,
+        sets: parseInt(sets, 10),
+        repsOrTime: parseInt(repsOrTime, 10),
+        weight: parseFloat(weight),
+      }).unwrap(); // `.unwrap()` helps to handle errors easily
+
+      // Reset form fields
+      setExerciseType("");
+      setExerciseName("");
+      setSets("");
+      setRepsOrTime("");
+      setWeight("");
+
+      console.log("Exercise added successfully");
+    } catch (error) {
+      console.error("Error adding exercise:", error);
+    }
   };
 
   return (

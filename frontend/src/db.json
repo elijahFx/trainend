@@ -7,7 +7,8 @@
     "weight": 72,
     "type": "countable",
     "time": null,
-    "timeOfChange": "26.10.2024, 19:14"
+    "timeOfChange": "26.10.2024, 19:14",
+    "id": "3123122as3d"
   },
   {
     "name": "Приседания",
@@ -17,7 +18,8 @@
     "weight": 72,
     "type": "countable",
     "time": null,
-    "timeOfChange": "26.10.2024, 19:15"
+    "timeOfChange": "26.10.2024, 19:15",
+    "id": "313312dasd"
   },
   {
     "name": "Планка",
@@ -27,6 +29,7 @@
     "weight": null,
     "type": "time",
     "time": 50,
-    "timeOfChange": "26.10.2024, 20:44"
+    "timeOfChange": "26.10.2024, 20:44",
+    "id": "312312dasd"
   }
 ]

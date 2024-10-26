@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import ExercisesList from "./components/ExercisesList";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<ExercisesList />} />
+            <Route path="/*" element={<NotFound />}/>
           </Routes>
           <Footer />
         </div>

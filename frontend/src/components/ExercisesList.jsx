@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AddExercise from "./AddExercise";
-import exs from "../db.json";
 import Exercise from "./Exercise";
+import { useGetExercisesQuery } from "../apis/exerciseApi";
+import exs from "../db.json"
 
 export default function ExercisesList() {
+  const { data, isLoading, error } = useGetExercisesQuery();
+
+  const render = !data ? exs : data
+
   return (
     <div className="exercises_list">
       <AddExercise />
       <div className="exercise_container">
-        {exs.map((el, indx) => {
+        {render.map((el, indx) => {
           return (
             <Exercise
               name={el.name}
@@ -21,6 +26,7 @@ export default function ExercisesList() {
               time={el.time}
               key={indx}
               num={indx}
+              id={el.id}
             />
           );
         })}
