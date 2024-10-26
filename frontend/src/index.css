@@ -3,3 +3,169 @@
   margin: 0;
   padding: 0;
 }
+
+#root {
+  overflow: hidden;
+}
+
+.exercises_list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.exercise_container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 30px;
+  gap: 20px;
+}
+
+.main_wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.exercise-form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 55vh;
+  width: 40vw;
+}
+
+.exercise-form h2 {
+  margin-bottom: 20px;
+  color: #333333;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #555555;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #61dafb;
+}
+
+.exercise-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 15px 0;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: transform 0.2s ease;
+  height: fit-content;
+  position: relative;
+}
+
+.exercise-card:hover {
+  transform: translateY(-5px);
+}
+
+.exercise-header h3 {
+  font-size: 1.5rem;
+  color: #333333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.exercise-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exercise-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-weight: bold;
+  color: #555555;
+}
+
+.value {
+  font-size: 1.1rem;
+  color: #666666;
+}
+
+.value-with-arrows {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.arrow-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #61dafb;
+  transition: color 0.3s ease;
+}
+
+.arrow-button:hover {
+  color: #21a1f1;
+}
+
+.delete-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: red;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+.delete-button:active {
+  transform: scale(0.8);
+}

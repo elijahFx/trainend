@@ -1,11 +1,11 @@
 const express = require("express");
 
 const {
-    editExerc,
     addExerc,
     getAllExerc,
     deleteAllExerc,
-    editExerc
+    editExerc,
+    deleteExerc
 } = require("../controllers/exerControllers")
 
 const router = express.Router();
