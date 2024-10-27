@@ -22,8 +22,12 @@ export default function AddExercise() {
         type: exerciseType,
         name: exerciseName,
         sets: parseInt(sets, 10),
-        repsOrTime: parseInt(repsOrTime, 10),
+        reps: parseInt(repsOrTime, 10),
         weight: parseFloat(weight),
+        time: 3123,
+        dateOfChange: "daewqe41231",
+        progress: "dasdadd",
+        user_id: "3123123dfasdasd"
       }).unwrap(); // `.unwrap()` helps to handle errors easily
 
       // Reset form fields

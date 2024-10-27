@@ -1,25 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useDeleteExerciseMutation, useEditExerciseMutation } from "../apis/exerciseApi"; // Import the mutation hooks
-
-// Debounce function
-const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-};
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useDeleteExerciseMutation, useEditExerciseMutation } from "../apis/exerciseApi";
+import debounce from "lodash/debounce"; // Import lodash debounce
 
 export default function Exercise({
-  id, // Make sure to pass the exercise ID to this component
+  id,
   name,
   reps,
   sets,
@@ -38,29 +22,66 @@ export default function Exercise({
   const [currentWeight, setCurrentWeight] = useState(weight);
   const [currentTime, setCurrentTime] = useState(time);
 
+  const isInitialRender = useRef(true);
+
+  // Track initial values using refs
+  const initialSets = useRef(sets);
+  const initialReps = useRef(reps);
+  const initialWeight = useRef(weight);
+  const initialTime = useRef(time);
+
   // Use the deleteExercise and editExercise mutation hooks
   const [deleteExercise] = useDeleteExerciseMutation();
   const [editExercise] = useEditExerciseMutation();
 
-  // Debounce the changes
-  const debouncedSets = useDebounce(currentSets, 500);
-  const debouncedReps = useDebounce(currentReps, 500);
-  const debouncedWeight = useDebounce(currentWeight, 500);
-  const debouncedTime = useDebounce(currentTime, 500);
+  // Debounced version of the updateExercise function
+  const updateExercise = async (updatedData) => {
+    try {
+      await editExercise(updatedData).unwrap();
+      console.log("Упражнение обновлено");
+    } catch (error) {
+      console.error("Ошибка обновления упражнения:", error);
+    }
+  };
 
-  // Effect to handle editing the exercise when debounced values change
+  const debouncedUpdateExercise = useCallback(
+    debounce((updatedData) => updateExercise(updatedData), 500),
+    []
+  );
+
+  // Effect to handle editing the exercise when local state changes
   useEffect(() => {
-    const updateExercise = async () => {
-      try {
-        await editExercise({ id, sets: debouncedSets, reps: debouncedReps, weight: debouncedWeight, time: debouncedTime }).unwrap();
-        console.log("Упражнение обновлено");
-      } catch (error) {
-        console.error("Ошибка обновления упражнения:", error);
-      }
-    };
+    // Skip if it's the initial render
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
 
-    updateExercise();
-  }, [debouncedSets, debouncedReps, debouncedWeight, debouncedTime, id, editExercise]);
+    // Only update if the current values are different from the initial ones
+    if (
+      currentSets !== initialSets.current ||
+      currentReps !== initialReps.current ||
+      currentWeight !== initialWeight.current ||
+      currentTime !== initialTime.current
+    ) {
+      const updatedData = {
+        id,
+        sets: currentSets,
+        reps: currentReps,
+        weight: currentWeight,
+        time: currentTime,
+      };
+      
+      // Call the debounced function
+      debouncedUpdateExercise(updatedData);
+
+      // Update the initial refs to the new values
+      initialSets.current = currentSets;
+      initialReps.current = currentReps;
+      initialWeight.current = currentWeight;
+      initialTime.current = currentTime;
+    }
+  }, [currentSets, currentReps, currentWeight, currentTime, id]);
 
   // Handlers for increasing/decreasing sets, reps, weight, and time
   const increaseSets = () => setCurrentSets((prev) => prev + 1);
