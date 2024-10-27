@@ -1,12 +1,12 @@
 const express = require("express");
 
 const {
-    addExerc,
-    getAllExerc,
-    deleteAllExerc,
-    editExerc,
-    deleteExerc
-} = require("../controllers/exerControllers")
+  addExerc,
+  getAllExerc,
+  deleteAllExerc,
+  editExerc,
+  deleteExerc,
+} = require("../controllers/exerControllers");
 
 const router = express.Router();
 
@@ -14,9 +14,9 @@ router.get("/", getAllExerc);
 
 router.post("/", addExerc);
 
-router.delete("/:id", deleteExerc);
+router.delete("/all", deleteAllExerc);
 
-router.delete("/all/:id", deleteAllExerc);
+router.delete("/:id", deleteExerc);
 
 router.patch("/:id", editExerc);
 

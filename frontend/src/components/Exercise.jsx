@@ -7,7 +7,7 @@ export default function Exercise({
   name,
   reps,
   sets,
-  timeOfChange,
+  dateOfChange,
   weight,
   type,
   user_id,
@@ -173,7 +173,7 @@ export default function Exercise({
         </div>
         <div className="exercise-info">
           <span className="label">Последнее изменение: </span>
-          <span className="value"> {`${timeOfChange}`}</span>
+          <span className="value"> {`${dateOfChange}`}</span>
         </div>
       </div>
     </div>

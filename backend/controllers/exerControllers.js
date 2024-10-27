@@ -1,7 +1,16 @@
 const createDbConnection = require("../db");
 
 async function editExerc(req, res) {
-  const db = await createDbConnection(); // Get the database connection
+  try {
+    const db = await createDbConnection();
+    // your code here...
+  } catch (connectionError) {
+    console.error("Ошибка при подключении к базе данных:", connectionError);
+    return res.status(500).json({
+      err: `Ошибка при подключении к базе данных: ${connectionError}`,
+    });
+  }
+
   const { id } = req.params;
   const { name, reps, sets, dateOfChange, progress, type, user_id, time } =
     req.body;
@@ -41,7 +50,8 @@ async function editExerc(req, res) {
 }
 
 async function addExerc(req, res) {
-  const db = await createDbConnection(); // Get the database connection
+  const db = await createDbConnection();
+
   const {
     name,
     reps,
@@ -52,10 +62,11 @@ async function addExerc(req, res) {
     user_id,
     time,
     weight,
+    id,
   } = req.body;
 
   // Validate input
-  if (name === undefined || reps === undefined || sets === undefined) {
+  if ((name === undefined || sets === undefined, id === undefined)) {
     return res
       .status(400)
       .send(
@@ -65,11 +76,11 @@ async function addExerc(req, res) {
 
   // Define the SQL query with correct columns
   const query =
-    "INSERT INTO exercise (name, reps, sets, dateOfChange, progress, type, user_id, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO exercise (name, reps, sets, dateOfChange, progress, type, user_id, time, weight, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   try {
     await db.execute(query, [
       name,
-      reps,
+      reps !== undefined ? reps : null,
       sets,
       dateOfChange || null, // Use null if dateOfChange is not provided
       progress || null, // Use null if progress is not provided
@@ -77,11 +88,12 @@ async function addExerc(req, res) {
       user_id || null, // Use null if user_id is not provided
       time || null,
       weight || null, // Use null if time is not provided
+      id,
     ]);
     res.status(201).json({ msg: "Упражнение добавлено успешно" });
   } catch (err) {
     console.error("Ошибка при добавлении упражнения:", err);
-    res.status(500).json({ err: "Ошибка при добавлении упражнения" });
+    res.status(500).json({ err: `Ошибка при добавлении упражнения: ${err}` });
   } finally {
     await db.end(); // Close the connection after use
   }
@@ -108,10 +120,10 @@ async function deleteExerc(req, res) {
 
   try {
     const [result] = await db.execute(query, [id]);
-    res.send("Упражнение удалено");
+    res.status(200).json({msg: `Упражнение удалено: ${result}`});
   } catch (err) {
     console.error("Ошибка при удалении упражнения:", err);
-    res.status(500).send("Ошибка при удалении");
+    res.status(500).json({err: `Ошибка: ${err}`});
   } finally {
     await db.end();
   }

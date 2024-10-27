@@ -5,9 +5,11 @@ const BASE_URL = URLS[0];
 export const exerciseApi = createApi({
   reducerPath: "exerciseApi",
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  tagTypes: ["Exercises"], // Add this line to define tag types
   endpoints: (builder) => ({
     getExercises: builder.query({
       query: () => "exercises",
+      providesTags: ["Exercises"], // Provide a tag for caching
     }),
 
     addExercise: builder.mutation({
@@ -16,6 +18,7 @@ export const exerciseApi = createApi({
         method: "POST",
         body: newExercise,
       }),
+      invalidatesTags: ["Exercises"], // Invalidate cache on add
     }),
 
     editExercise: builder.mutation({
@@ -24,6 +27,7 @@ export const exerciseApi = createApi({
         method: "PUT",
         body: updatedExercise,
       }),
+      invalidatesTags: ["Exercises"], // Invalidate cache on edit
     }),
 
     deleteExercise: builder.mutation({
@@ -31,13 +35,15 @@ export const exerciseApi = createApi({
         url: `exercises/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Exercises"], // Invalidate cache on delete
     }),
 
     deleteAllExercises: builder.mutation({
       query: () => ({
-        url: "exercises",
+        url: "exercises/all",
         method: "DELETE",
       }),
+      invalidatesTags: ["Exercises"], // Invalidate cache on delete all
     }),
   }),
 });
@@ -47,5 +53,5 @@ export const {
   useAddExerciseMutation,
   useEditExerciseMutation,
   useDeleteExerciseMutation,
-  useDeleteAllExercisesMutation
+  useDeleteAllExercisesMutation,
 } = exerciseApi;

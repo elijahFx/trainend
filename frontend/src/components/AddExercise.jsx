@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useAddExerciseMutation } from "../apis/exerciseApi";
+import { nanoid } from "nanoid";
+import getFormattedDateTime from "../utils/dates";
 
 export default function AddExercise() {
   // Form state
@@ -8,9 +10,16 @@ export default function AddExercise() {
   const [sets, setSets] = useState("");
   const [repsOrTime, setRepsOrTime] = useState("");
   const [weight, setWeight] = useState("");
+  const [time, setTime] = useState("");
 
   // RTK Query Mutation Hook
   const [addExercise] = useAddExerciseMutation();
+
+  const exMap = { "На повторения": "countable", "На время": "time" };
+
+  function handleChange(e) {
+    setExerciseType(e.target.value);
+  }
 
   // Form submission handler
   const handleFormSubmit = async (e) => {
@@ -19,15 +28,16 @@ export default function AddExercise() {
     try {
       // Call the mutation function to create a new exercise
       await addExercise({
-        type: exerciseType,
+        type: exMap[exerciseType],
         name: exerciseName,
         sets: parseInt(sets, 10),
-        reps: parseInt(repsOrTime, 10),
-        weight: parseFloat(weight),
-        time: 3123,
-        dateOfChange: "daewqe41231",
+        reps: exerciseType === "На повторения" ? parseInt(repsOrTime, 10) : null,
+        weight: exerciseType === "На повторения" ? parseFloat(weight) : null,
+        time: exerciseType === "На время" ? parseInt(time, 10) : null,
+        dateOfChange: getFormattedDateTime(),
         progress: "dasdadd",
-        user_id: "3123123dfasdasd"
+        user_id: "1",
+        id: nanoid(),
       }).unwrap(); // `.unwrap()` helps to handle errors easily
 
       // Reset form fields
@@ -36,6 +46,7 @@ export default function AddExercise() {
       setSets("");
       setRepsOrTime("");
       setWeight("");
+      setTime("");
 
       console.log("Exercise added successfully");
     } catch (error) {
@@ -52,12 +63,12 @@ export default function AddExercise() {
           <select
             id="exerciseType"
             value={exerciseType}
-            onChange={(e) => setExerciseType(e.target.value)}
+            onChange={(e) => handleChange(e)}
             required
           >
             <option value="">Выберите тип</option>
-            <option value="strength">На повторения</option>
-            <option value="cardio">На время</option>
+            <option value="На повторения">На повторения</option>
+            <option value="На время">На время</option>
           </select>
         </div>
         <div className="form-group">
@@ -80,28 +91,46 @@ export default function AddExercise() {
             required
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="repsOrTime">
-            {exerciseType === "cardio" ? "Время (мин)" : "Повторения"}
-          </label>
-          <input
-            type="number"
-            id="repsOrTime"
-            value={repsOrTime}
-            onChange={(e) => setRepsOrTime(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="weight">Вес (кг)</label>
-          <input
-            type="number"
-            id="weight"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            required
-          />
-        </div>
+        
+        {/* Conditionally render inputs based on exerciseType */}
+        {exerciseType === "На повторения" && (
+          <>
+            <div className="form-group">
+              <label htmlFor="repsOrTime">Повторения</label>
+              <input
+                type="number"
+                id="repsOrTime"
+                value={repsOrTime}
+                onChange={(e) => setRepsOrTime(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="weight">Вес (кг)</label>
+              <input
+                type="number"
+                id="weight"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                required
+              />
+            </div>
+          </>
+        )}
+        
+        {exerciseType === "На время" && (
+          <div className="form-group">
+            <label htmlFor="time">Время (мин)</label>
+            <input
+              type="number"
+              id="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              required
+            />
+          </div>
+        )}
+
         <button type="submit" className="submit-btn">
           Добавить упражнение
         </button>
