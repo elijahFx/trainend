@@ -9,8 +9,13 @@ app.use(cors());
 app.use(express.json());
 
 const exerRoutes = require("./routes/exercise");
+const addictionRoutes = require("./routes/addiction")
+const userRoutes = require("./routes/users")
 
 app.use("/exercises", exerRoutes);
+app.use("/addictions", addictionRoutes)
+app.use("/users", userRoutes)
+
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,

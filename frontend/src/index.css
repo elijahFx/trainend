@@ -178,7 +178,6 @@
 }
 
 .delete-all-btn {
-  margin-top: -25px;
   background-color: red; /* Red color for the delete button */
   color: white; /* Text color */
   padding: 10px 20px; /* Padding */
@@ -187,6 +186,7 @@
   font-size: 1rem; /* Font size */
   cursor: pointer; /* Pointer cursor on hover */
   transition: background-color 0.3s ease; /* Transition for hover effect */
+  min-width: 75%;
 }
 
 .delete-all-btn:hover {
@@ -206,15 +206,15 @@
   justify-content: center;
   align-items: center;
   height: 100vh; /* Full viewport height */
-  width: 100vw;  /* Full viewport width */
+  width: 100vw; /* Full viewport width */
 }
 
 .loader::before {
   content: "";
-  width: 50px;  /* Adjust size as needed */
+  width: 50px; /* Adjust size as needed */
   height: 50px; /* Adjust size as needed */
-  border: 5px solid #007bff;  /* Border color of the circle */
-  border-top-color: transparent;  /* Make the top part transparent to create the spinning effect */
+  border: 5px solid #007bff; /* Border color of the circle */
+  border-top-color: transparent; /* Make the top part transparent to create the spinning effect */
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -244,7 +244,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 20px
+  gap: 20px;
 }
 
 .submit-btn {
@@ -279,4 +279,196 @@
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.addiction-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: fit-content;
+  min-width: fit-content;
+}
+
+.circle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 4px solid #d3d3d3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.circle-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  color: #fff;
+}
+
+.circle-content h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.circle-content p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.reset-btn {
+  padding: 8px 16px;
+  background-color: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.reset-btn:hover {
+  background-color: #e60000;
+}
+
+.addiction-progress .button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.addiction-progress .edit-btn,
+.addiction-progress .delete-btn,
+.addiction-progress .reset-btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Стили для кнопки "Редактировать" */
+.addiction-progress .edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.addiction-progress .edit-btn:hover {
+  background-color: #388e3c;
+}
+
+/* Стили для кнопки "Удалить" */
+.addiction-progress .delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.addiction-progress .delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Стили для кнопки "Обнулить" */
+.addiction-progress .reset-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.addiction-progress .reset-btn:hover {
+  background-color: #1976d2;
+}
+
+.addiction_list {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  height: fit-content;
+  width: fit-content;
+  padding: 50px 0;
+  gap: 25px;
+  flex-wrap: wrap;
+  
+}
+
+.addiction-progress .button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.addiction-progress .edit-btn,
+.addiction-progress .save-btn,
+.addiction-progress .delete-btn,
+.addiction-progress .reset-btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addiction-progress .edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.addiction-progress .edit-btn:hover {
+  background-color: #388e3c;
+}
+
+.addiction-progress .save-btn {
+  background-color: #ffc107;
+  color: black;
+}
+
+.addiction-progress .save-btn:hover {
+  background-color: #ffa000;
+}
+
+.addiction-progress .delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.addiction-progress .delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+.addiction-progress .reset-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.addiction-progress .reset-btn:hover {
+  background-color: #1976d2;
+}
+
+.addiction-progress .edit-input {
+  width: 100%;
+  padding: 10px; /* Increase padding for better touch targets */
+  font-size: 16px; /* Adjust font size for readability */
+  margin-bottom: 10px; /* Space below the input */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 4px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+}
+
+/* Focus state for the input */
+.addiction-progress .edit-input:focus {
+  border-color: #4caf50; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Highlight effect */
+}
+
+/* Optional: Placeholder styling */
+.addiction-progress .edit-input::placeholder {
+  color: #aaa; /* Lighter color for placeholder text */
+  opacity: 1; /* Make sure it's fully opaque */
 }

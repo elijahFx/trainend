@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom for navigation
+import { Link, useLocation } from "react-router-dom"; // Import useLocation for current route
 import styled from "styled-components"; // Import styled-components for styling
 
 const HeaderWrapper = styled.header`
@@ -10,7 +10,7 @@ const HeaderWrapper = styled.header`
   font-size: 1.5rem;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  min-height: 20vh
+  min-height: 20vh;
 `;
 
 const ButtonGroup = styled.div`
@@ -35,14 +35,26 @@ const StyledLink = styled(Link)`
 `;
 
 export default function Header() {
+  const location = useLocation(); // Get the current location
+
   return (
     <HeaderWrapper>
       Trainend - сайт для отслеживания тренировок, воздержания от зависимостей,
       крутых цитаток и журнал планов и дел!
       <ButtonGroup>
-        <StyledLink to="/dependencies">Зависимости</StyledLink>
-        <StyledLink to="/journal">Журнал</StyledLink>
-        <StyledLink to="/calendar">Календарь</StyledLink>
+        {/* Show all links, except the one that matches the current pathname */}
+        {location.pathname !== "/addictions" && (
+          <StyledLink to="/addictions">Зависимости</StyledLink>
+        )}
+        {location.pathname !== "/" && (
+          <StyledLink to="/">Упражнения</StyledLink>
+        )}
+        {location.pathname !== "/journal" && (
+          <StyledLink to="/journal">Журнал</StyledLink>
+        )}
+        {location.pathname !== "/calendar" && (
+          <StyledLink to="/calendar">Календарь</StyledLink>
+        )}
       </ButtonGroup>
     </HeaderWrapper>
   );

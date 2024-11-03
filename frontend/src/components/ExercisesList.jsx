@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import AddExercise from "./AddExercise";
 import Exercise from "./Exercise";
 import { useGetExercisesQuery } from "../apis/exerciseApi";
-import DeleteAllExercises from "./DeleteAllExercises";
+import DeleteAll from "./DeleteAll";
 
 export default function ExercisesList() {
   const { data, isLoading, error } = useGetExercisesQuery();
@@ -34,7 +34,7 @@ export default function ExercisesList() {
         <>
           <div className="left_container">
             <AddExercise />
-            <DeleteAllExercises />
+            <DeleteAll type="exercises"/>
           </div>
           <div className="exercise_container">
             {data.map((el, indx) => {
