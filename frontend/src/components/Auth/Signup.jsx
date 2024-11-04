@@ -3,6 +3,9 @@ import styled from "styled-components"; // Import styled-components
 import { useSignupMutation } from "../../apis/userApi"; // Ensure this hook matches your API
 import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
+import { useDispatch } from "react-redux";
+import { signupUser } from "../../slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 // Styled components
 const SignupContainer = styled.div`
@@ -109,6 +112,9 @@ const Signup = () => {
     confirmPassword: "", // Added confirmPassword state
   });
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   console.log(formData);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,7 +134,7 @@ const Signup = () => {
     }
 
     try {
-      await signup({
+     const result = await signup({
         name: formData?.name,
         email: formData.email,
         date: formData.date,
@@ -136,6 +142,9 @@ const Signup = () => {
         id: nanoid(),
         role: "user"
       }).unwrap();
+
+      dispatch(signupUser(result))
+      navigate("/")
       // Handle successful signup, e.g., redirect to login or dashboard
       console.log("Signup successful!");
     } catch (error) {

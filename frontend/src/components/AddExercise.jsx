@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAddExerciseMutation } from "../apis/exerciseApi";
 import { nanoid } from "nanoid";
 import getFormattedDateTime from "../utils/dates";
+import { useSelector } from "react-redux";
 
 export default function AddExercise() {
   // Form state
@@ -11,6 +12,9 @@ export default function AddExercise() {
   const [repsOrTime, setRepsOrTime] = useState("");
   const [weight, setWeight] = useState("");
   const [time, setTime] = useState("");
+
+  const user_id = useSelector((state) => state?.auth?.user?.id);
+  
 
   // RTK Query Mutation Hook
   const [addExercise] = useAddExerciseMutation();
@@ -31,12 +35,13 @@ export default function AddExercise() {
         type: exMap[exerciseType],
         name: exerciseName,
         sets: parseInt(sets, 10),
-        reps: exerciseType === "На повторения" ? parseInt(repsOrTime, 10) : null,
+        reps:
+          exerciseType === "На повторения" ? parseInt(repsOrTime, 10) : null,
         weight: exerciseType === "На повторения" ? parseFloat(weight) : null,
         time: exerciseType === "На время" ? parseInt(time, 10) : null,
         dateOfChange: getFormattedDateTime(),
         progress: "dasdadd",
-        user_id: "1",
+        user_id: user_id,
         id: nanoid(),
       }).unwrap(); // `.unwrap()` helps to handle errors easily
 
@@ -91,7 +96,7 @@ export default function AddExercise() {
             required
           />
         </div>
-        
+
         {/* Conditionally render inputs based on exerciseType */}
         {exerciseType === "На повторения" && (
           <>
@@ -117,7 +122,7 @@ export default function AddExercise() {
             </div>
           </>
         )}
-        
+
         {exerciseType === "На время" && (
           <div className="form-group">
             <label htmlFor="time">Время (мин)</label>

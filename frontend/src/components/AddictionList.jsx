@@ -7,6 +7,7 @@ import {
   useGetAddictionsQuery,
 } from "../apis/addictionApi";
 import DeleteAll from "./DeleteAll";
+import { useSelector } from "react-redux";
 
 const getTodayDate = () => {
   const today = new Date();
@@ -24,7 +25,9 @@ export default function AddAddiction() {
 
   const { data, isLoading, error } = useGetAddictionsQuery();
   const [AddAddiction] = useAddAddictionMutation();
-  console.log(data, isLoading, error);
+
+  const user_id = useSelector((state) => state?.auth?.user?.id);
+  
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +38,7 @@ export default function AddAddiction() {
         type: addictionType,
         date: getFormattedDateTime(),
         id: nanoid(),
-        user_id: "1",
+        user_id: user_id,
       }).unwrap();
 
       setAddictionName("");

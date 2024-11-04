@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components"; // Import styled-components
 import { useLoginMutation } from "../../apis/userApi";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../slices/authSlice";
 
 // Styled components
 const LoginContainer = styled.div`
@@ -104,6 +107,9 @@ const Login = () => {
     password: "",
   });
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -115,9 +121,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(formData).unwrap();
+      const result = await login({
+        email: formData.username,
+        password: formData.password,
+      }).unwrap();
       // Handle successful login, e.g., redirect to dashboard
       console.log("Login successful!");
+      dispatch(loginUser(result));
+      navigate("/");
     } catch (error) {
       // Handle login error
       console.error("Login failed: ", error);
@@ -129,9 +140,7 @@ const Login = () => {
       <Title>Войти</Title>
       <Form onSubmit={handleSubmit}>
         <FormGroup>
-          <Label>
-            Почта или имя:
-          </Label>
+          <Label>Почта или имя:</Label>
           <Input
             type="text"
             name="username"
@@ -141,9 +150,7 @@ const Login = () => {
           />
         </FormGroup>
         <FormGroup>
-          <Label>
-            Пароль:
-          </Label>
+          <Label>Пароль:</Label>
           <Input
             type="password"
             name="password"
@@ -156,7 +163,11 @@ const Login = () => {
           {isLoading ? "Входим ;)" : "Войти"}
         </Button>
       </Form>
-      {isError && <ErrorMessage>Error: {error.data?.message || "Login failed"}</ErrorMessage>}
+      {isError && (
+        <ErrorMessage>
+          Error: {error.data?.message || "Login failed"}
+        </ErrorMessage>
+      )}
       <StyledLink to="/signup">Зарегистрироваться</StyledLink>
     </LoginContainer>
   );
