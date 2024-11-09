@@ -106,7 +106,7 @@ export default function Event({
   }
 
   return (
-    <EventWrapper isDone={isDone} isExpanded={isExpanded} onClick={handleClick}>
+    <EventWrapper isDone={isDone} $isExpanded={isExpanded} onClick={handleClick}>
       <ButtonWrapper>
         <DoneCheckbox>{isDone ? "✔️" : "✅"}</DoneCheckbox>
         <Button onClick={handleDelete}>🗑️</Button>
