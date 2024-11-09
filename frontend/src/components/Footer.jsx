@@ -11,7 +11,8 @@ const FooterWrapper = styled.footer`
   font-size: 1rem;
   width: 100%;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-  min-height: 15vh;
+  min-height: 20vh;
+  height: 15vh
 `;
 
 const FooterText = styled.p`

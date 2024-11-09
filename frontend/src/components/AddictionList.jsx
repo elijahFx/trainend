@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import getFormattedDateTime from "../utils/dates";
 import Addiction from "./Addiction";
@@ -23,11 +23,17 @@ export default function AddAddiction() {
   const [addictionType, setAddictionType] = useState("");
   const [startDate, setStartDate] = useState(getTodayDate()); // Default to today
 
-  const { data, isLoading, error } = useGetAddictionsQuery();
+  const { data, isLoading, erro, refetch } = useGetAddictionsQuery();
   const [AddAddiction] = useAddAddictionMutation();
 
   const user_id = useSelector((state) => state?.auth?.user?.id);
-  
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      refetch(); 
+    }
+  }, [isLoggedIn, refetch]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

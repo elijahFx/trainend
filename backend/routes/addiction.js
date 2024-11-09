@@ -7,17 +7,18 @@ const {
   deleteAddiction,
   editAddiction,
 } = require("../controllers/addictionsControllers");
+const authenticateToken = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", getAddictions);
+router.get("/", authenticateToken, getAddictions);
 
-router.post("/", addAddiction);
+router.post("/", authenticateToken, addAddiction);
 
-router.delete("/all", deleteAllAddictions);
+router.delete("/all", authenticateToken, deleteAllAddictions);
 
-router.delete("/:id", deleteAddiction);
+router.delete("/:id", authenticateToken, deleteAddiction);
 
-router.patch("/:id", editAddiction);
+router.patch("/:id", authenticateToken, editAddiction);
 
 module.exports = router;

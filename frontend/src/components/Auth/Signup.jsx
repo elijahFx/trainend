@@ -21,6 +21,8 @@ const SignupContainer = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 15px; // Increased gap for better spacing between elements
+ height: 75vh;
+  min-height: 75vh
 `;
 
 const Title = styled.h2`

@@ -5,12 +5,22 @@ const BASE_URL = URLS[0];
 
 export const addictionApi = createApi({
   reducerPath: "addictionApi",
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: BASE_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth?.user?.token;
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   tagTypes: ["Addictions"], // Define tag types
   endpoints: (builder) => ({
     getAddictions: builder.query({
       query: () => "addictions",
-      providesTags: ["Addictions"], // Provide a tag for caching
+      providesTags: ["Addictions"],
+      refetchOnMountOrArgChange: true,
     }),
 
     addAddiction: builder.mutation({

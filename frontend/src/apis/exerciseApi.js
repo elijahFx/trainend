@@ -4,12 +4,22 @@ const BASE_URL = URLS[0];
 
 export const exerciseApi = createApi({
   reducerPath: "exerciseApi",
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
-  tagTypes: ["Exercises"], // Add this line to define tag types
+  baseQuery: fetchBaseQuery({
+    baseUrl: BASE_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth?.user?.token;
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  tagTypes: ["Exercises"], // Define tag types here
   endpoints: (builder) => ({
     getExercises: builder.query({
       query: () => "exercises",
-      providesTags: ["Exercises"], // Provide a tag for caching
+      providesTags: ["Exercises"],
+      refetchOnMountOrArgChange: true,
     }),
 
     addExercise: builder.mutation({

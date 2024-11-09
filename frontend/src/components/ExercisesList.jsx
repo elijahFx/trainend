@@ -3,21 +3,23 @@ import AddExercise from "./AddExercise";
 import Exercise from "./Exercise";
 import { useGetExercisesQuery } from "../apis/exerciseApi";
 import DeleteAll from "./DeleteAll";
+import { useSelector } from "react-redux";
 
 export default function ExercisesList() {
-  const { data, isLoading, error } = useGetExercisesQuery();
+  const { data, isLoading, error, refetch } = useGetExercisesQuery();
 
-  console.log(error);
-  
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      refetch();
+    }
+  }, [isLoggedIn, refetch]);
 
   return (
     <div className="exercises_list">
       {/* Loader while loading */}
-      {isLoading && (
-        <div className="loader">
-          
-        </div>
-      )}
+      {isLoading && <div className="loader"></div>}
 
       {/* Error popup if there's an error */}
       {error && (
@@ -34,7 +36,7 @@ export default function ExercisesList() {
         <>
           <div className="left_container">
             <AddExercise />
-            <DeleteAll type="exercises"/>
+            <DeleteAll type="exercises" />
           </div>
           <div className="exercise_container">
             {data.map((el, indx) => {

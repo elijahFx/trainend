@@ -5,24 +5,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../slices/authSlice"; // Import your logout action
 
 const HeaderWrapper = styled.header`
-  background-color: #282c34;
-  padding: 20px;
-  color: white;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  min-height: 20vh;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  background-color: rgb(31, 38, 41);
+  min-height: 10vh;
+  padding: 0 20px;
+  height: 10vh;
 `;
 
 const ButtonGroup = styled.div`
-  margin-top: 15px;
   display: flex;
   justify-content: center;
   gap: 15px;
+  margin-right: 25px
 `;
 
 const StyledLink = styled(Link)`
@@ -36,6 +32,20 @@ const StyledLink = styled(Link)`
 
   &:hover {
     background-color: #21a1f1;
+  }
+`;
+
+const LoginLink = styled(Link)`
+  margin: 20px;
+  padding: 6px 15px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 153, 255);
+  border-radius: 5px;
+  text-decoration: none;
+  transition: 0.4s;
+
+  &:hover {
+    background-color: rgb(0, 95, 158);
   }
 `;
 
@@ -54,10 +64,12 @@ const LogoutButton = styled.button`
   }
 `;
 
-const WelcomeMessage = styled.div`
-  font-size: 1.2rem;
-  margin-top: 10px;
-  color: #61dafb;
+const Logo = styled(Link)`
+  font-weight: bold;
+  font-size: 32px;
+  color: rgb(255, 255, 255);
+  font-family: "Mulish", sans-serif;
+  text-decoration: none;
 `;
 
 export default function Header() {
@@ -74,26 +86,29 @@ export default function Header() {
 
   return (
     <HeaderWrapper>
-      Trainend - сайт для отслеживания тренировок, воздержания от зависимостей,
-      крутых цитаток и журнал планов и дел!
-      {isLogged && (
-        <WelcomeMessage>Добро пожаловать, {user.name || user.email}</WelcomeMessage>
+      <Logo to="/">
+        Trainend
+        {isLogged && (user.name ? `/${user.name}` : `@${user.email}`)}
+      </Logo>
+      {isLogged ? (
+        <ButtonGroup>
+          {location.pathname !== "/addictions" && (
+            <StyledLink to="/addictions">Зависимости</StyledLink>
+          )}
+          {location.pathname !== "/" && (
+            <StyledLink to="/">Упражнения</StyledLink>
+          )}
+          {location.pathname !== "/journal" && (
+            <StyledLink to="/journal">Журнал</StyledLink>
+          )}
+          {location.pathname !== "/calendar" && (
+            <StyledLink to="/calendar">Календарь</StyledLink>
+          )}
+          <LogoutButton onClick={handleLogout}>Выйти</LogoutButton>
+        </ButtonGroup>
+      ) : (
+        <LoginLink to="/login">Войти</LoginLink>
       )}
-      <ButtonGroup>
-        {location.pathname !== "/addictions" && (
-          <StyledLink to="/addictions">Зависимости</StyledLink>
-        )}
-        {location.pathname !== "/" && (
-          <StyledLink to="/">Упражнения</StyledLink>
-        )}
-        {location.pathname !== "/journal" && (
-          <StyledLink to="/journal">Журнал</StyledLink>
-        )}
-        {location.pathname !== "/calendar" && (
-          <StyledLink to="/calendar">Календарь</StyledLink>
-        )}
-        {isLogged && <LogoutButton onClick={handleLogout}>Выйти</LogoutButton>}
-      </ButtonGroup>
     </HeaderWrapper>
   );
 }

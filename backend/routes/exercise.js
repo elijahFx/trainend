@@ -7,17 +7,18 @@ const {
   editExerc,
   deleteExerc,
 } = require("../controllers/exerControllers");
+const authenticateToken = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", getAllExerc);
+router.get("/", authenticateToken, getAllExerc);
 
-router.post("/", addExerc);
+router.post("/", authenticateToken, addExerc);
 
-router.delete("/all", deleteAllExerc);
+router.delete("/all", authenticateToken, deleteAllExerc);
 
-router.delete("/:id", deleteExerc);
+router.delete("/:id", authenticateToken, deleteExerc);
 
-router.patch("/:id", editExerc);
+router.patch("/:id", authenticateToken, editExerc);
 
 module.exports = router;

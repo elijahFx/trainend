@@ -4,7 +4,7 @@ import { useDeleteAllAddictionsMutation } from "../apis/addictionApi";
 import { confirmAlert } from 'react-confirm-alert'; // Import confirmAlert
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import CSS for styling
 
-export default function DeleteAllExercises({ type }) {
+export default function DeleteAll({ type }) {
   let text;
 
   if (type === "exercises") {

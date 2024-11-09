@@ -2,13 +2,24 @@ const createDbConnection = require("../db");
 
 async function getAddictions(req, res) {
   const db = await createDbConnection(); // Get the database connection
-  const query = "SELECT * FROM addiction";
+  const userId = req.user?._id || req.params.user_id;
+  console.log(userId);
+  
+
+  if (!userId) {
+    return res.status(400).json({ err: "User ID is required" });
+  }
+
+  const query = "SELECT * FROM addiction WHERE user_id = ?";
+  console.log(query);
+  
   try {
-    const [rows] = await db.execute(query);
+    const [rows] = await db.execute(query, [userId]);
+    console.log(rows);
     res.json(rows);
   } catch (err) {
-    console.error("Ошибка при получении всех зависимостей:", err);
-    res.status(500).json({ err: "Ошибка при получении данных" });
+    console.error("Error retrieving addictions:", err);
+    res.status(500).json({ err: "Error retrieving data" });
   } finally {
     await db.end();
   }
