@@ -52,14 +52,30 @@ async function addEvent(req, res) {
 }
 
 async function editEvent(req, res) {
-  let db;
-  try {
-    db = await createDbConnection();
-  } catch (connectionError) {
-    console.error("Ошибка при подключении к базе данных:", connectionError);
-    return res.status(500).json({
-      err: `Ошибка при подключении к базе данных: ${connectionError}`,
+  const db = await createDbConnection(); // Get the database connection
+  const { id } = req.params; // Get the event ID from the request parameters
+  const data = req.body; // Get the isDone value from the request body
+
+  // Check if both id and isDone are provided
+  if (data.id === undefined || data.isDone === undefined) {
+    return res.status(400).json({
+      err: "Event ID and isDone status are required",
     });
+  }
+
+  const query = "UPDATE event SET isDone = ? WHERE id = ?";
+
+  try {
+    const [result] = await db.execute(query, [isDone, id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ msg: "Event not found" });
+    }
+    res.status(200).json({ msg: "Event updated successfully", result });
+  } catch (err) {
+    console.error("Error updating event:", err);
+    res.status(500).json({ err: "Error updating event" });
+  } finally {
+    await db.end();
   }
 }
 

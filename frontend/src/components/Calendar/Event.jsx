@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useDeleteEventMutation } from "../../apis/eventApi";
+import {
+  useDeleteEventMutation,
+  useToggleIsDoneMutation,
+} from "../../apis/eventApi";
 
 const EventWrapper = styled.div`
   display: flex;
@@ -10,13 +13,23 @@ const EventWrapper = styled.div`
   width: 100%;
   align-items: flex-start;
   justify-content: center;
-  background-color: ${({ isDone }) => (isDone ? "lightgreen" : "wheat")};
+  background-color: ${({ importance, isDone }) =>
+    isDone
+      ? "lightgreen"
+      : importance === "high"
+      ? "#FF4343"
+      : importance === "medium"
+      ? "#E2E272"
+      : importance === "low"
+      ? "#90EE90"
+      : "wheat"};
   border: 1px solid black;
   margin-top: 3px;
   position: relative;
   padding: 10px;
   cursor: pointer;
   transition: height 0.3s ease;
+  opacity: ${({ isDone }) => (isDone ? 0.75 : 1)};
 `;
 
 const ButtonWrapper = styled.div`
@@ -84,6 +97,8 @@ export default function Event({
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const [toggleIsDone] = useToggleIsDoneMutation();
+
   // Handle toggle of expanded description
   const handleClick = () => {
     setIsExpanded((prevState) => !prevState);
@@ -105,10 +120,19 @@ export default function Event({
     }
   }
 
+  async function handleDone() {
+    await toggleIsDone({ id: id, isDone: !isDone }).unwrap();
+  }
+
   return (
-    <EventWrapper isDone={isDone} $isExpanded={isExpanded} onClick={handleClick}>
+    <EventWrapper
+      importance={importance}
+      isDone={isDone}
+      $isExpanded={isExpanded}
+      onClick={handleClick}
+    >
       <ButtonWrapper>
-        <DoneCheckbox>{isDone ? "✔️" : "✅"}</DoneCheckbox>
+        <DoneCheckbox onClick={handleDone}>{isDone ? "✔️" : "✅"}</DoneCheckbox>
         <Button onClick={handleDelete}>🗑️</Button>
       </ButtonWrapper>
       <DateTime>

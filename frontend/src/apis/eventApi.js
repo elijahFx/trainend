@@ -18,7 +18,6 @@ export const eventApi = createApi({
   tagTypes: ["Events"],
   endpoints: (builder) => ({
 
-    
     getEvents: builder.query({
       query: () => "events",
       providesTags: ["Events"],
@@ -26,25 +25,31 @@ export const eventApi = createApi({
     }),
 
     addEvent: builder.mutation({
-        query: (newEvent) => ({
-          url: "events",
-          method: "POST",
-          body: newEvent,
-        }),
-        invalidatesTags: ["Events"], // Invalidate cache on add
+      query: (newEvent) => ({
+        url: "events",
+        method: "POST",
+        body: newEvent,
       }),
-  
-      deleteEvent: builder.mutation({
-        query: (id) => ({
-          url: `events/${id}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Events"], // Invalidate cache on delete
-      }),
-  
+      invalidatesTags: ["Events"], // Invalidate cache on add
+    }),
 
+    deleteEvent: builder.mutation({
+      query: (id) => ({
+        url: `events/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Events"], // Invalidate cache on delete
+    }),
+
+    toggleIsDone: builder.mutation({
+      query: (data) => ({
+        url: `events/${data.id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Events"] // Invalidate cache on toggle
+    }),
 
   }),
 });
 
-export const { useAddEventMutation, useDeleteEventMutation, useGetEventsQuery } = eventApi
+export const { useAddEventMutation, useDeleteEventMutation, useGetEventsQuery, useToggleIsDoneMutation } = eventApi;

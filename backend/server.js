@@ -9,16 +9,14 @@ app.use(cors());
 app.use(express.json());
 
 const exerRoutes = require("./routes/exercise");
-const addictionRoutes = require("./routes/addiction")
-const userRoutes = require("./routes/users")
-const eventRoutes = require("./routes/event")
+const addictionRoutes = require("./routes/addiction");
+const userRoutes = require("./routes/users");
+const eventRoutes = require("./routes/event");
 
 app.use("/exercises", exerRoutes);
-app.use("/addictions", addictionRoutes)
-app.use("/users", userRoutes)
-app.use("/events", eventRoutes)
-
-
+app.use("/addictions", addictionRoutes);
+app.use("/users", userRoutes);
+app.use("/events", eventRoutes);
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,

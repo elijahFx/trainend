@@ -20,8 +20,8 @@ const LoginContainer = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 10px;
-  height: 65vh;
-  min-height: 65vh
+  height: 75vh;
+  min-height: 75vh
 `;
 
 const Title = styled.h2`

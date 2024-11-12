@@ -115,6 +115,12 @@ const EventForm = styled.form`
 `;
 
 const CalendarContainer = styled.div`
+  .today-tile {
+    background-color: white;
+    border: 1px solid black !important;
+  }
+ 
+
   .highlight-tile {
     color: white !important;
     font-weight: bold;
@@ -128,11 +134,7 @@ const CalendarContainer = styled.div`
     background-color: rgb(226, 226, 114) !important;
   }
   .high-importance {
-    background-color: red !important;
-  }
-  .today-tile {
-    background-color: gray !important;
-    color: white !important;
+    background-color: rgb(255, 67, 67) !important;
   }
 `;
 
@@ -155,6 +157,7 @@ const ColorSquare = styled.div`
   height: 20px;
   border-radius: 4px;
   background-color: ${({ color }) => color};
+  ${({ border }) => border && `border: 1px solid black;`}
 `;
 
 export default function CalendarList() {
@@ -224,25 +227,32 @@ export default function CalendarList() {
   };
 
   const addHighlightClass = ({ date, view }) => {
+    if (view !== "month") return null;
+
     const today = new Date();
-    if (view === "month") {
-      if (isSameDay(date, today)) {
-        return "today-tile";
-      }
-      const event = events?.find((event) =>
-        isSameDay(new Date(event.date), date)
-      );
-      if (event) {
-        if (event.importance === "low") {
-          return "highlight-tile low-importance";
-        } else if (event.importance === "medium") {
-          return "highlight-tile medium-importance";
-        } else if (event.importance === "high") {
-          return "highlight-tile high-importance";
-        }
-      }
+    const isToday = isSameDay(date, today);
+
+    // Find events for the specific date
+    const eventsForDate = events?.filter((event) =>
+      isSameDay(new Date(event.date), date)
+    );
+
+    // Determine the highest importance level for the date
+    let importanceClass = "";
+    if (eventsForDate.length > 0) {
+      const importanceLevels = ["low", "medium", "high"];
+      const highestImportance = eventsForDate.reduce((prev, curr) =>
+        importanceLevels.indexOf(curr.importance) >
+        importanceLevels.indexOf(prev.importance)
+          ? curr
+          : prev
+      ).importance;
+
+      importanceClass = `${highestImportance}-importance`;
     }
-    return null;
+
+    // Add the "today-tile" class if it's today, otherwise just return the importance class
+    return isToday ? `today-tile ${importanceClass}` : importanceClass;
   };
 
   return (
@@ -313,7 +323,7 @@ export default function CalendarList() {
 
         <LegendContainer>
           <LegendItem>
-            <ColorSquare color="gray" />
+            <ColorSquare color="white" border="1" />
             Сегодняшний день
           </LegendItem>
           <LegendItem>
@@ -342,11 +352,13 @@ export default function CalendarList() {
           })}
         </h3>
         <EventsList>
-        {events?.filter((event) => event.date === selectedDate).length > 0 ? (
+          {events?.filter((event) => event.date === selectedDate).length > 0 ? (
             events
               .filter((event) => event.date === selectedDate)
               .sort((a, b) => a.time.localeCompare(b.time))
-              .map((event, indx) => <Event num={indx + 1} key={event.id} {...event} />)
+              .map((event, indx) => (
+                <Event num={indx + 1} key={event.id} {...event} />
+              ))
           ) : (
             <NoEvents /> // Отображаем NoEvents, если нет событий
           )}
